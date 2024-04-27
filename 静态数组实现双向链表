@@ -1,0 +1,55 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int N=1e5+5;
+
+int last[N],nextp[N];
+
+int main()
+{
+    ios::sync_with_stdio(0),cin.tie(0),cout.tie(0);
+
+   int n;cin>>n;
+   int now=1;
+   nextp[now]=0;last[now]=0;
+   nextp[0]=now;last[0]=now;
+   for(int i=2;i<=n;i++)
+   {
+       int bo;
+       cin>>now>>bo;
+       if(bo==0)
+       {
+           nextp[last[now]]=i;last[i]=last[now];last[now]=i;nextp[i]=now;
+       }
+       else
+       {
+           last[nextp[now]]=i;nextp[i]=nextp[now];nextp[now]=i;last[i]=now;
+       }
+   }
+   int m;cin>>m;
+   int good=0;          //标记重复的要删去的数字
+   while(m--)
+   {
+       int s;cin>>s;
+       if(good==s)continue;
+       good=s;
+       now=0;
+       for(int i=1;i<=n;i++)
+       {
+           now=nextp[now];
+           if(now==s)
+           {
+               n--;
+               nextp[last[now]]=nextp[now];last[nextp[now]]=last[now];
+               break;
+           }
+       }
+   }
+   now=0;
+   now=nextp[now];
+   while(n--)
+   {
+       cout<<now<<" ";
+       now=nextp[now];
+   }
+   return 0;
+}
